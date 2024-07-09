@@ -1,0 +1,15 @@
+backend:
+  url: https://www.reddit.com
+  reservoir: /home/tanishq/projects/media-scraper/reservoir
+
+database:
+  host: postgres
+  port: 5432
+  user: postgres
+  password: postgres
+  name: mediascraper
+
+redis:
+  address: redis:6379
+  password:
+  db: 0

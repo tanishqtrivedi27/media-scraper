@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	// "gopkg.in/yaml.v2"
+
 	"github.com/gocolly/colly/v2"
 	"github.com/tanishqtrivedi27/media-scraper/internal/storage"
 )
@@ -25,7 +27,6 @@ func main() {
 	}
 	rdb, _ := storage.NewRedisStorage(redisConfig)
 	redisStore, _ := storage.NewStorage(rdb)
-	
 
 	dbconfig := storage.PostgresConfig{
 		Host:     "localhost",

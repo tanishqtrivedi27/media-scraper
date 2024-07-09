@@ -3,10 +3,9 @@ module github.com/tanishqtrivedi27/media-scraper
 go 1.22.3
 
 require (
-    github.com/gocolly/colly/v2 v2.1.0
+	github.com/gocolly/colly/v2 v2.1.0
 	github.com/lib/pq v1.10.9
 )
-
 
 require (
 	github.com/PuerkitoBio/goquery v1.9.2 // indirect
@@ -28,5 +27,5 @@ require (
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
-	gopkg.in/yaml.v2 v2.2.5 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

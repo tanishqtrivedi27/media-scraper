@@ -16,8 +16,8 @@ import (
 	"github.com/tanishqtrivedi27/media-scraper/internal/storage"
 )
 
-const basedir = "/home/tanishq/projects/media-scraper/reservoir"
-const websiteurl = "https://news.google.com/"
+const baseDir = "/home/tanishq/projects/media-scraper/reservoir"
+const websiteUrl = "https://news.google.com/"
 
 func main() {
 	redisConfig := storage.RedisConfig{
@@ -28,14 +28,14 @@ func main() {
 	rdb, _ := storage.NewRedisStorage(redisConfig)
 	redisStore, _ := storage.NewStorage(rdb)
 
-	dbconfig := storage.PostgresConfig{
+	dbConfig := storage.PostgresConfig{
 		Host:     "localhost",
 		User:     "postgres",
 		Password: "postgres",
 		DBName:   "mediascraper",
 		Port:     5432,
 	}
-	db, _ := storage.NewPostgreSQLStorage(dbconfig)
+	db, _ := storage.NewPostgreSQLStorage(dbConfig)
 	postgreStore, _ := storage.NewDBStorage(db)
 
 	scrapeWebsite(redisStore, postgreStore)
@@ -45,9 +45,9 @@ func scrapeWebsite(redisStore *storage.Storage, postgreStore *storage.DBStorage)
 	c := colly.NewCollector(colly.MaxDepth(2))
 
 	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36")
+		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (HTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36")
 		r.Headers.Set("Accept-Language", "en-US,en;q=0.9")
-		r.Headers.Set("Referer", websiteurl)
+		r.Headers.Set("Referer", websiteUrl)
 		fmt.Println("Visiting: ", r.URL)
 	})
 
@@ -76,7 +76,7 @@ func scrapeWebsite(redisStore *storage.Storage, postgreStore *storage.DBStorage)
 		fmt.Println("Scraped:", r.Request.URL)
 	})
 
-	err := c.Visit(websiteurl)
+	err := c.Visit(websiteUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,7 +102,7 @@ func downloadImage(imgURL string, postgreStore *storage.DBStorage) {
 
 	defer response.Body.Close()
 	fileName := buildFileName(imgURL)
-	fileName = filepath.Join(basedir, fileName)
+	fileName = filepath.Join(baseDir, fileName)
 
 	file, err := os.Create(fileName)
 	if err != nil {
@@ -115,5 +115,8 @@ func downloadImage(imgURL string, postgreStore *storage.DBStorage) {
 		panic(err)
 	}
 
-	postgreStore.InsertTuple(imgURL, fileName)
+	err = postgreStore.InsertTuple(imgURL, fileName)
+	if err != nil {
+		return
+	}
 }

@@ -41,11 +41,7 @@ func NewDBStorage(db *sql.DB) (*DBStorage, error) {
 	return &DBStorage{db: db}, nil
 }
 
-func (dbstore *DBStorage) InsertTuple(real_url, stored_url string) error {
-	_, err := dbstore.db.Exec("INSERT INTO url_metadata(real_url, stored_url) VALUES ($1, $2)", real_url, stored_url)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (dbStore *DBStorage) InsertTuple(realUrl, storedUrl string) error {
+	_, err := dbStore.db.Exec("INSERT INTO url_metadata(realUrl, storedUrl) VALUES ($1, $2)", realUrl, storedUrl)
+	return err
 }
